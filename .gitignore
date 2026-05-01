@@ -1,0 +1,5 @@
+mysqldata/
+.DS_Store
+uploads/
+*.pem
+*.pid
