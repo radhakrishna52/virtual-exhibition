@@ -1,22 +1,25 @@
 FROM php:8.3-apache
 
-# Enable mysqli extension
+# Install mysqli extension
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 
 # Enable mod_rewrite
 RUN a2enmod rewrite
 
-# Set working directory
-WORKDIR /var/www/html
-
-# Copy all files
+# Copy app files
 COPY . /var/www/html/
 
-# Fix permissions for uploads
+# Fix permissions
 RUN mkdir -p /var/www/html/uploads && chmod 777 /var/www/html/uploads
 
-# Apache config to allow .htaccess
-RUN echo '<Directory /var/www/html>\n\tOptions Indexes FollowSymLinks\n\tAllowOverride All\n\tRequire all granted\n</Directory>' \
-    > /etc/apache2/conf-available/app.conf && a2enconf app
+# Allow .htaccess overrides
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
+# Entrypoint script to set PORT dynamically
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 80
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["apache2-foreground"]
