@@ -11,7 +11,7 @@ define('DB_NAME', getenv('MYSQL_DATABASE') ?: 'virtual_exhibition');
 define('DB_PORT', (int)(getenv('MYSQLPORT') ?: 3306));
 
 // Site configuration
-define('SITE_URL', getenv('SITE_URL') ?: 'https://v-exhib.up.railway.app');
+define('SITE_URL', getenv('SITE_URL') ?: 'https://virtual-exhibition-production.up.railway.app');
 define('UPLOAD_DIR', 'uploads/');
 
 // Include other required files
